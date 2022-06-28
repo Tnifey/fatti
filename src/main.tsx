@@ -1,14 +1,9 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import { render as preactRender } from 'preact';
 import App from './App'
 
-export default function render(root: HTMLElement, data: any) {
+export default function render(root: HTMLElement, props: any = {}) {
   if(root) {
-      ReactDOM.createRoot(root).render(
-        <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    )
+    preactRender(<App {...props} />, root)
   }
 }
 

@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState } from 'preact/compat';
 
-function App() {
+export default function App(props: any) {
   const [count, setCount] = useState(0);
-  return (<div>Hello World! <button type="button" onClick={(e) => setCount(count + 1)}>Count: ${count}</button></div>);
+  return (<div>
+    <button type="button" onClick={(e) => setCount(count + 1)}>
+      Count: {count}
+    </button>
+  </div>);
 }
-
-export default App;

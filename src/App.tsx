@@ -44,12 +44,14 @@ export default function App(props: any) {
     if (!initialOptions) {
       const opts = [];
       const opelements = [...select.querySelectorAll('option')];
-      opelements.map((option) => {
-        opts.push({
-          value: option.getAttribute('value'),
-          label: option.innerText
+      if (opelements?.length) {
+        opelements.map((option) => {
+          opts.push({
+            value: option.getAttribute('value'),
+            label: option.innerText
+          });
         });
-      });
+      }
       setOptions(opts);
     }
 

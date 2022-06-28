@@ -305,6 +305,54 @@ n$1 = c$2.slice, l$2 = { __e: function(n2, l2, u2, i) {
 }, _$1.prototype.forceUpdate = function(n2) {
   this.__v && (this.__e = true, n2 && this.__h.push(n2), m$2(this));
 }, _$1.prototype.render = d$2, t$2 = [], o$1 = typeof Promise == "function" ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, g$3.__r = 0, f$2 = 0;
+var classnames$2 = { exports: {} };
+/*!
+  Copyright (c) 2018 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+(function(module) {
+  (function() {
+    var hasOwn = {}.hasOwnProperty;
+    function classNames2() {
+      var classes = [];
+      for (var i = 0; i < arguments.length; i++) {
+        var arg = arguments[i];
+        if (!arg)
+          continue;
+        var argType = typeof arg;
+        if (argType === "string" || argType === "number") {
+          classes.push(arg);
+        } else if (Array.isArray(arg)) {
+          if (arg.length) {
+            var inner = classNames2.apply(null, arg);
+            if (inner) {
+              classes.push(inner);
+            }
+          }
+        } else if (argType === "object") {
+          if (arg.toString === Object.prototype.toString) {
+            for (var key in arg) {
+              if (hasOwn.call(arg, key) && arg[key]) {
+                classes.push(key);
+              }
+            }
+          } else {
+            classes.push(arg.toString());
+          }
+        }
+      }
+      return classes.join(" ");
+    }
+    if (module.exports) {
+      classNames2.default = classNames2;
+      module.exports = classNames2;
+    } else {
+      window.classNames = classNames2;
+    }
+  })();
+})(classnames$2);
+var classnames$1 = classnames$2.exports;
 function _extends() {
   _extends = Object.assign ? Object.assign.bind() : function(target) {
     for (var i = 1; i < arguments.length; i++) {
@@ -5579,80 +5627,128 @@ var StateManagedSelect = /* @__PURE__ */ x$1(function(props, ref) {
   }, baseSelectProps));
 });
 var Select$1 = StateManagedSelect;
-function App(props) {
-  const {
-    eventPrefix = "fatti:",
-    readOnly: initialReadOnly = false,
-    disabled: initialDisabled = false,
-    value: initialValue = [],
-    options: initialOptions = null,
-    select,
-    onChange: onChange2,
-    onInput,
-    onSelect,
-    onBlur,
-    onFocus: onFocus2,
-    onInputChange,
-    onKeyDown,
-    onMenuOpen,
-    onMenuClose,
-    onMenuScrollTop,
-    onMenuScrollBottom,
-    ...rest
-  } = props;
-  const [readOnly, setReadOnly] = y$1(initialReadOnly);
-  const [disabled, setDisabled] = y$1(initialDisabled);
-  const [value, setValue] = y$1(initialValue);
-  const [options2, setOptions] = y$1(initialOptions);
-  const emit = T$1((name, ...data) => {
-    if (!select)
-      return;
-    const event = new CustomEvent(`${eventPrefix}${name}`, {
-      detail: data
+function useMutationObserver(ref, options2 = { attributes: true, childList: true, subtree: true }, callback) {
+  _(() => {
+    const mutationObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => callback == null ? void 0 : callback(mutation));
     });
-    select.dispatchEvent(event);
-  }, [select, eventPrefix]);
-  h$1(() => {
-    const initd = select.style.display;
-    select.style.display = "none";
-    if (!initialOptions) {
-      const opts = [];
-      const opelements = [...select.querySelectorAll("option")];
-      if (opelements == null ? void 0 : opelements.length) {
-        opelements.map((option) => {
-          opts.push({
-            value: option.getAttribute("value"),
-            label: option.innerText
-          });
-        });
+    mutationObserver.observe(ref.current, options2);
+    return () => {
+      var _a;
+      (_a = mutationObserver == null ? void 0 : mutationObserver.disconnect) == null ? void 0 : _a.call(mutationObserver);
+    };
+  }, [ref, options2, callback]);
+}
+function App(props) {
+  var _a, _b, _c, _d, _e;
+  const { parent, select, ...rest } = props;
+  const [disabled, setDisabled] = y$1((_a = select == null ? void 0 : select.current) == null ? void 0 : _a.disabled);
+  const [rtl, setRtl] = y$1((_b = select == null ? void 0 : select.current) == null ? void 0 : _b.hasAttribute("data-rtl"));
+  const [loading, setLoading] = y$1((_c = select == null ? void 0 : select.current) == null ? void 0 : _c.hasAttribute("data-loading"));
+  const [searchable, setSearchable] = y$1((_d = select == null ? void 0 : select.current) == null ? void 0 : _d.hasAttribute("data-searchable"));
+  const [clearable, setClearable] = y$1((_e = select == null ? void 0 : select.current) == null ? void 0 : _e.hasAttribute("data-clearable"));
+  const [value, setValue] = y$1(null);
+  const [options2, setOptions] = y$1([]);
+  const handleMutation = T$1((mutation) => {
+    if (mutation.target !== select.current)
+      return;
+    const target = mutation.target;
+    if (mutation.type === "attributes" && mutation.attributeName) {
+      console.log("mutated", mutation.attributeName, target.getAttribute(mutation.attributeName));
+      switch (mutation.attributeName) {
+        case "disabled": {
+          return setDisabled(target.disabled);
+        }
+        case "data-loading": {
+          return setLoading(target.hasAttribute("data-loading"));
+        }
+        case "data-searchable": {
+          return setSearchable(target.hasAttribute("data-searchable"));
+        }
+        case "data-clearable": {
+          return setClearable(target.hasAttribute("data-clearable"));
+        }
+        case "data-rtl": {
+          return setRtl(target.hasAttribute("data-rtl"));
+        }
       }
-      setOptions(opts);
     }
-    setDisabled(select.disabled);
-    setReadOnly(select.readonly);
-    console.log([select]);
+  }, []);
+  const mutationObserverOptions = F$1(() => ({
+    attributes: true,
+    subtree: true
+  }), []);
+  useMutationObserver(select, mutationObserverOptions, handleMutation);
+  function getSelectOptions() {
+    if (!select.current)
+      return [];
+    const items = [...select.current.querySelectorAll("option")];
+    if (!(items == null ? void 0 : items.length))
+      return [];
+    return items.map((option) => {
+      return {
+        value: option.getAttribute("value"),
+        label: option.innerText
+      };
+    }).filter(Boolean);
+  }
+  const emit = T$1((name, ...data) => {
+    const current = select.current;
+    if (!current)
+      return;
+    const event = new CustomEvent(`select:${name}`, {
+      detail: data,
+      select: current
+    });
+    current.dispatchEvent(event);
+  }, []);
+  h$1(() => {
+    const current = select.current;
+    if (!current)
+      return;
+    emit("before-init", current);
+    const initd = current.style.display;
+    current.style.display = "none";
+    const opts = getSelectOptions();
+    setOptions(opts);
+    if (opts[0]) {
+      setValue([{ ...opts[0] }]);
+    }
     emit("init", select);
     return () => {
-      select.style.display = initd;
+      current.style.display = initd;
       emit("destroy", select);
     };
   }, [select]);
+  _(() => {
+    if (select) {
+      const opts = select.current.querySelectorAll("option");
+      opts.forEach((option) => {
+        if (option.getAttribute("value") === (value == null ? void 0 : value.value)) {
+          option.setAttribute("selected", true);
+        } else {
+          option.removeAttribute("selected");
+        }
+      });
+      emit("change", value);
+    }
+  }, [value]);
   function handleChange(event) {
-    typeof onChange2 === "function" && onChange2(event);
-    emit("change", event);
-    setValue(event.value);
+    setValue(event);
   }
   function handleInput(event) {
-    typeof onInput === "function" && onInput(event);
     emit("input", event);
   }
   function handleInputChange(event) {
-    typeof onInputChange === "function" && onInputChange(event);
     emit("input-change", event);
   }
   return /* @__PURE__ */ v$2(Select$1, {
     options: options2,
     isDisabled: disabled,
+    isLoading: loading,
+    isSearchable: searchable,
+    isClearable: clearable,
+    isRtl: rtl,
     onChange: handleChange,
     onInput: handleInput,
     onInputChange: handleInputChange,
@@ -5660,11 +5756,25 @@ function App(props) {
     ...rest
   });
 }
-function Select(root, props = {}) {
+function Select(select, props = {}) {
+  const parent = select.parentElement;
+  const root = document.createElement(props.wrapperElement || "div");
+  parent == null ? void 0 : parent.appendChild(root);
+  for (let classname of classnames$1("fatti__wrapper", props.classes, [...select.classList.values()]).split(" ")) {
+    root.classList.add(classname);
+  }
+  const parentRef = p$2();
+  parentRef.current = parent;
+  const selectRef = p$2();
+  selectRef.current = select;
   S$1(/* @__PURE__ */ v$2(App, {
-    ...props
+    select: selectRef,
+    parent: parentRef
   }), root);
-  props.select.addEventListener("fatti:change", console.log);
-  return props.select;
+  return {
+    wrapper: root,
+    parent,
+    select
+  };
 }
 export { Select };

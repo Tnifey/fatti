@@ -27,6 +27,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "classnames": "^2.3.1",
     "preact": "^10.8.2",
     "react-select": "^5.3.2"
   },

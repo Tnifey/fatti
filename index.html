@@ -7,15 +7,24 @@
     <title>Vite App</title>
   </head>
   <body style="display: flex; align-items: center; justify-content: center; width: 100%; min-height: 100vh;">
-    <div id="root" style="width: 400px; height: 200px;">
-      <select class="select" name="named" readonly>
-        <option value="A" selected>siema</option>
-        <option value="B">no witam</option>
-        <option value="C">elo elo</option>
-        <option value="D">hej</option>
-        <option value="E">cześć</option>
-      </select>
-    </div>
+    <form method="get">
+      <div id="root" style="width: 400px;margin: 2rem 0;">
+        <select class="select" name="named" required>
+          <option value="A" selected>siema</option>
+          <option value="B">no witam</option>
+          <option value="C">elo elo</option>
+          <option value="D">hej</option>
+          <option value="E">cześć</option>
+        </select>
+      </div>
+      <button type="submit">Submit</button>
+
+      <button type="button" class="toggle-disable">Toggle disabled</button>
+
+      <div class="options-buttons" style="padding-top: 2rem; padding-bottom: 2rem;">
+        <button type="button" class="toggle-loading">Toggle loading</button>
+      </div>
+    </form>
     <script type="module" src="/src/index.ts"></script>
   </body>
 </html>

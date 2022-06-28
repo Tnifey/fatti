@@ -522,7 +522,7 @@ function App(props) {
   const [count, setCount] = y(0);
   return /* @__PURE__ */ v$1("div", null, /* @__PURE__ */ v$1("button", {
     type: "button",
-    onClick: (e2) => setCount(count + 1)
+    onClick: () => setCount(count + 1)
   }, "Count: ", count));
 }
 function render(root, props = {}) {

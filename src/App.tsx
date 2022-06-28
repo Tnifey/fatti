@@ -1,10 +1,8 @@
-import { useState } from 'preact/compat';
+import { useContext } from 'preact/hooks';
+import Select from 'react-select';
+import { Context } from './context';
 
-export default function App(props: any) {
-  const [count, setCount] = useState(0);
-  return (<div>
-    <button type="button" onClick={() => setCount(count + 1)}>
-      Count: {count}
-    </button>
-  </div>);
+export default function App() {
+  const { props } = useContext(Context);
+  return (<Select {...props} />);
 }

@@ -305,6 +305,20 @@ n$1 = c$2.slice, l$2 = { __e: function(n2, l2, u2, i) {
 }, _$1.prototype.forceUpdate = function(n2) {
   this.__v && (this.__e = true, n2 && this.__h.push(n2), m$2(this));
 }, _$1.prototype.render = d$2, t$2 = [], o$1 = typeof Promise == "function" ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, g$3.__r = 0, f$2 = 0;
+function _extends() {
+  _extends = Object.assign ? Object.assign.bind() : function(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  };
+  return _extends.apply(this, arguments);
+}
 var t$1, u, r$1, o, i$1 = 0, c$1 = [], f$1 = [], e$1 = l$2.__b, a = l$2.__r, v$2 = l$2.diffed, l$1 = l$2.__c, m$1 = l$2.unmount;
 function p$2(t2, r2) {
   l$2.__h && l$2.__h(u, t2, i$1 || r2), i$1 = 0;
@@ -733,20 +747,6 @@ var compat_module$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defin
   useDebugValue: x$2,
   useErrorBoundary: V$2
 }, Symbol.toStringTag, { value: "Module" }));
-function _extends() {
-  _extends = Object.assign ? Object.assign.bind() : function(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-    return target;
-  };
-  return _extends.apply(this, arguments);
-}
 function sheetForTag(tag) {
   if (tag.sheet) {
     return tag.sheet;
@@ -12749,27 +12749,90 @@ var StateManagedSelect = /* @__PURE__ */ x$1(function(props, ref) {
   }, baseSelectProps));
 });
 var Select = StateManagedSelect;
-const Context = D$2({
-  props: {},
-  updateProps(props) {
-    this.props = props;
+function App(props) {
+  const {
+    eventPrefix = "fatti:",
+    readOnly: initialReadOnly = false,
+    disabled: initialDisabled = false,
+    value: initialValue = [],
+    options: initialOptions = null,
+    select,
+    onChange: onChange2,
+    onInput,
+    onSelect,
+    onBlur,
+    onFocus: onFocus2,
+    onInputChange,
+    onKeyDown,
+    onMenuOpen,
+    onMenuClose,
+    onMenuScrollTop,
+    onMenuScrollBottom,
+    ...rest
+  } = props;
+  const [readOnly, setReadOnly] = y$1(initialReadOnly);
+  const [disabled, setDisabled] = y$1(initialDisabled);
+  const [value, setValue] = y$1(initialValue);
+  const [options2, setOptions] = y$1(initialOptions);
+  const emit = T$2((name, ...data) => {
+    if (!select)
+      return;
+    const event = new CustomEvent(`${eventPrefix}${name}`, {
+      detail: data
+    });
+    select.dispatchEvent(event);
+  }, [select, eventPrefix]);
+  h$1(() => {
+    const initd = select.style.display;
+    select.style.display = "none";
+    if (!initialOptions) {
+      const opts = [];
+      const opelements = [...select.querySelectorAll("option")];
+      opelements.map((option) => {
+        opts.push({
+          value: option.getAttribute("value"),
+          label: option.innerText
+        });
+      });
+      setOptions(opts);
+    }
+    setDisabled(select.disabled);
+    setReadOnly(select.readonly);
+    console.log([select]);
+    emit("init", select);
+    return () => {
+      select.style.display = initd;
+      emit("destroy", select);
+    };
+  }, [select]);
+  function handleChange(event) {
+    typeof onChange2 === "function" && onChange2(event);
+    emit("change", event);
+    setValue(event.value);
   }
-});
-function App() {
-  const { props } = q$2(Context);
+  function handleInput(event) {
+    typeof onInput === "function" && onInput(event);
+    emit("input", event);
+  }
+  function handleInputChange(event) {
+    typeof onInputChange === "function" && onInputChange(event);
+    emit("input-change", event);
+  }
   return /* @__PURE__ */ v$3(Select, {
-    ...props
+    options: options2,
+    isDisabled: disabled,
+    onChange: handleChange,
+    onInput: handleInput,
+    onInputChange: handleInputChange,
+    value,
+    ...rest
   });
 }
 function render(root, props = {}) {
-  const context = q$2(Context);
-  _(() => {
-    context.updateProps(props);
-    context.updateProps(props);
-  }, []);
-  S$2(/* @__PURE__ */ v$3(Context.Provider, {
-    value: context
-  }, /* @__PURE__ */ v$3(App, null)), root);
-  return context;
+  S$2(/* @__PURE__ */ v$3(App, {
+    ...props
+  }), root);
+  props.select.addEventListener("fatti:change", console.log);
+  return props.select;
 }
 export { render as default };

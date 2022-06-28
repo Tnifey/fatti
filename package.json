@@ -10,8 +10,11 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/selectz.umd.js",
+  "main": "dist/selectz.umd.js",
   "module": "./dist/selectz.es.js",
+  "unpkg": "dist/selectz.iife.js",
+  "jsdelivr": "dist/selectz.iife.js",
+  "license": "MIT",
   "exports": {
     ".": {
       "import": "./dist/selectz.es.js",

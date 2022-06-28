@@ -5800,12 +5800,7 @@ function createSelect(select, options2 = {}) {
     ...props
   } = options2;
   const parent = select.parentElement;
-  const wrapper = document.createElement(wrapperElement || "div");
-  parent == null ? void 0 : parent.appendChild(wrapper);
-  const theWrapperClasses = classnames$1("fatti__wrapper", wrapperClassName, [...select.classList.values()]).split(" ");
-  for (let classname of theWrapperClasses) {
-    wrapper.classList.add(classname);
-  }
+  const theWrapperClasses = classnames$1("fatti__wrapper", wrapperClassName, [...select.classList.values()]);
   const parentRef = p$2();
   parentRef.current = parent;
   const selectRef = p$2();
@@ -5813,8 +5808,9 @@ function createSelect(select, options2 = {}) {
   S$1(/* @__PURE__ */ v$2(Select, {
     select: selectRef,
     parent: parentRef,
-    ...props
-  }), wrapper);
-  return { wrapper, parent, select };
+    ...props,
+    className: theWrapperClasses
+  }), parent);
+  return { parent, select };
 }
 export { createSelect };

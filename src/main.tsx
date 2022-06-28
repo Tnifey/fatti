@@ -14,19 +14,12 @@ export function createSelect(select: HTMLSelectElement, options: SelectOptions =
     ...props
   } = options;
 
-  const parent = select.parentElement;
-  const wrapper = document.createElement(wrapperElement || 'div');
-  parent?.appendChild(wrapper);
-
+  const parent = select.parentElement!;
   const theWrapperClasses = classnames(
     'fatti__wrapper',
     wrapperClassName,
     [...select.classList.values()]
-  ).split(' ');
-
-  for (let classname of theWrapperClasses) {
-    wrapper.classList.add(classname);
-  }
+  );
 
   const parentRef = createRef<Element | HTMLDivElement>();
   parentRef.current = parent;
@@ -34,7 +27,7 @@ export function createSelect(select: HTMLSelectElement, options: SelectOptions =
   const selectRef = createRef<Element | HTMLSelectElement>();
   selectRef.current = select;
 
-  preactRender(<Select select={selectRef} parent={parentRef} {...props} />, wrapper);
+  preactRender(<Select select={selectRef} parent={parentRef} {...props} className={theWrapperClasses} />, parent);
 
-  return { wrapper, parent, select };
+  return { parent, select };
 }

@@ -13,6 +13,21 @@ const select = root.querySelector("select.select")! as any as HTMLSelectElement;
   fat.select.addEventListener("fatti:change", console.log);
 })();
 
+const preview = document.querySelector<HTMLPreElement>("pre.preview")!;
+preview.innerText = select.value;
+
+select.addEventListener("fatti:change", event => {
+  // @ts-ignore
+  const value = event.target.value;
+  preview.innerText = value;
+});
+
+select.addEventListener("change", event => {
+  // @ts-ignore
+  const value = event.target.value;
+  preview.innerText = value;
+});
+
 document.body
   .querySelector(".toggle-disable")
   ?.addEventListener("click", () => {

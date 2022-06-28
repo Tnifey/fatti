@@ -117,7 +117,21 @@ export default function Select(props: SelectProps) {
     current.dispatchEvent(event);
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    const current = select.current as HTMLSelectElement;
+
+    function handler(event) {
+      console.log("the change", event, event.target.value);
+    }
+
+    current.addEventListener("change", handler);
+
+    return () => {
+      current.removeEventListener("change", handler, false);
+    };
+  }, [select.current]);
+
+  useEffect(() => {
     const current = select.current;
     if (!current) return;
 
@@ -141,7 +155,7 @@ export default function Select(props: SelectProps) {
   }, [select]);
 
   useEffect(() => {
-    if (select) {
+    if (!options?.length) {
       const opts = select.current.querySelectorAll("option");
 
       opts.forEach((option: HTMLOptionElement) => {
@@ -158,6 +172,9 @@ export default function Select(props: SelectProps) {
 
   function handleChange(event: any) {
     setValue(event);
+    select.current.value = event?.value;
+    const theEvent = new Event("change");
+    select.current.dispatchEvent(theEvent);
   }
 
   function handleInputChange(event: any) {
@@ -166,10 +183,14 @@ export default function Select(props: SelectProps) {
 
   function handleBlur(event: any) {
     emit("blur", event);
+    const theEvent = new Event("blur");
+    select.current.dispatchEvent(theEvent);
   }
 
   function handleFocus(event: any) {
     emit("focus", event);
+    const theEvent = new Event("focus");
+    select.current.dispatchEvent(theEvent);
   }
 
   function handleKeyDown(event: any) {

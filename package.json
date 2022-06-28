@@ -24,7 +24,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint:prettier": "npx prettier --write src"
   },
   "dependencies": {
     "classnames": "^2.3.1",
@@ -35,6 +36,7 @@
     "@prefresh/vite": "^2.2.8",
     "@types/node": "^18.0.0",
     "husky": "^8.0.1",
+    "prettier": "^2.7.1",
     "typescript": "^4.6.3",
     "vite": "^2.9.9"
   }

@@ -5627,7 +5627,11 @@ var StateManagedSelect = /* @__PURE__ */ x$1(function(props, ref) {
   }, baseSelectProps));
 });
 var ReactSelect = StateManagedSelect;
-function useMutationObserver(ref, options2 = { attributes: true, childList: true, subtree: true }, callback) {
+function useMutationObserver(ref, options2 = {
+  attributes: true,
+  childList: true,
+  subtree: true
+}, callback) {
   _(() => {
     const mutationObserver = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => callback == null ? void 0 : callback(mutation));
@@ -5794,13 +5798,11 @@ function Select(props) {
   });
 }
 function createSelect(select, options2 = {}) {
-  const {
-    wrapperElement,
-    wrapperClassName,
-    ...props
-  } = options2;
+  const { wrapperElement, wrapperClassName, ...props } = options2;
   const parent = select.parentElement;
-  const theWrapperClasses = classnames$1("fatti__wrapper", wrapperClassName, [...select.classList.values()]);
+  const theWrapperClasses = classnames$1("fatti__wrapper", wrapperClassName, [
+    ...select.classList.values()
+  ]);
   const parentRef = p$2();
   parentRef.current = parent;
   const selectRef = p$2();

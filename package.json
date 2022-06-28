@@ -1,0 +1,38 @@
+{
+  "name": "selectz",
+  "private": false,
+  "author": {
+    "email": "tnifey@gmail.com",
+    "name": "Tnifey",
+    "url": "https://github.com/tnifey"
+  },
+  "version": "0.0.1",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/selectz.umd.js",
+  "module": "./dist/selectz.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/selectz.es.js",
+      "require": "./dist/selectz.umd.js"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@vitejs/plugin-react": "^1.3.0",
+    "typescript": "^4.6.3",
+    "vite": "^2.9.9"
+  }
+}

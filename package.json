@@ -10,6 +10,7 @@
   "files": [
     "dist"
   ],
+  "types": "./types/main.d.ts",
   "main": "dist/selectz.umd.js",
   "module": "./dist/selectz.es.js",
   "unpkg": "dist/selectz.iife.js",

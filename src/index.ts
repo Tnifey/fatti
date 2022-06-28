@@ -1,13 +1,19 @@
-import { Select } from './main';
+import { createSelect } from './main';
 
 const root = document.querySelector("#root");
 // @ts-ignore
 const select = root.querySelector("select.select")! as any as HTMLSelectElement;
 
-// @ts-ignore
-const fat = Select(select);
+(() => {
 
-fat.select.addEventListener('fatti:change', console.log);
+    // @ts-ignore
+    const fat = createSelect(select, {
+        classNamePrefix: 'fatti'
+    });
+
+    fat.select.addEventListener('fatti:change', console.log);
+
+})();
 
 document.body.querySelector('.toggle-disable')?.addEventListener('click', () => {
     select.disabled = !select.disabled;
@@ -21,7 +27,6 @@ const options = [
 ];
 
 const buttons = document.body.querySelector('.options-buttons')!;
-
 buttons.innerHTML = "";
 
 options.forEach(name => {

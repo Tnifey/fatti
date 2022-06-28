@@ -1,13 +1,31 @@
 import { createRef, render as preactRender } from 'preact';
 import classnames from 'classnames';
-import App from './App';
+import Select, { SelectProps } from './select';
 
-export function Select(select: HTMLSelectElement, props: any = {}) {
+export type SelectOptions = Partial<{
+  wrapperElement?: 'div' | string,
+  wrapperClassName?: string;
+}> & Omit<SelectProps, 'parent' | 'select'>;
+
+export function createSelect(select: HTMLSelectElement, options: SelectOptions = {}) {
+  const {
+    wrapperElement,
+    wrapperClassName,
+    ...props
+  } = options;
+
   const parent = select.parentElement;
-  const root = document.createElement(props.wrapperElement || 'div');
-  parent?.appendChild(root);
-  for (let classname of classnames('fatti__wrapper', props.classes, [...select.classList.values()]).split(' ')) {
-    root.classList.add(classname);
+  const wrapper = document.createElement(wrapperElement || 'div');
+  parent?.appendChild(wrapper);
+
+  const theWrapperClasses = classnames(
+    'fatti__wrapper',
+    wrapperClassName,
+    [...select.classList.values()]
+  ).split(' ');
+
+  for (let classname of theWrapperClasses) {
+    wrapper.classList.add(classname);
   }
 
   const parentRef = createRef<Element | HTMLDivElement>();
@@ -16,11 +34,7 @@ export function Select(select: HTMLSelectElement, props: any = {}) {
   const selectRef = createRef<Element | HTMLSelectElement>();
   selectRef.current = select;
 
-  preactRender(<App select={selectRef} parent={parentRef} />, root);
+  preactRender(<Select select={selectRef} parent={parentRef} {...props} />, wrapper);
 
-  return {
-    wrapper: root,
-    parent,
-    select,
-  };
+  return { wrapper, parent, select };
 }

@@ -1,9 +1,18 @@
-import Select from 'react-select';
+import ReactSelect, { Props as ReactSelectProps } from 'react-select';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'preact/compat';
 import { useMutationObserver } from './useMutationObserver';
 
-export default function App(props: any) {
-  const { parent, select, ...rest } = props;
+export type SelectProps = Partial<Omit<ReactSelectProps, 'options'>> & {
+  parent: any,
+  select: any,
+};
+
+export default function Select(props: SelectProps) {
+  const {
+    parent,
+    select,
+    ...rest
+  } = props;
 
   const [disabled, setDisabled] = useState<boolean>(select?.current?.disabled);
   const [rtl, setRtl] = useState<boolean>(select?.current?.hasAttribute('data-rtl'));
@@ -26,19 +35,15 @@ export default function App(props: any) {
         case 'disabled': {
           return setDisabled(target.disabled);
         }
-
         case 'data-loading': {
           return setLoading(target.hasAttribute('data-loading'));
         }
-
         case 'data-searchable': {
           return setSearchable(target.hasAttribute('data-searchable'));
         }
-
         case 'data-clearable': {
           return setClearable(target.hasAttribute('data-clearable'));
         }
-
         case 'data-rtl': {
           return setRtl(target.hasAttribute('data-rtl'));
         }
@@ -131,15 +136,23 @@ export default function App(props: any) {
     emit('input-change', event);
   }
 
-  return (<Select
+  return (<ReactSelect
     options={options}
     isDisabled={disabled}
     isLoading={loading}
     isSearchable={searchable}
     isClearable={clearable}
     isRtl={rtl}
+    // onBlur
+    // onFocus
+    // onKeyDown
+    // onMenuClose
+    // onMenuOpen
+    // onMenuScrollToBottom
+    // onMenuScrollToTop
+    // getOptionLabel={getOptionLabel}
     onChange={handleChange}
-    onInput={handleInput}
+    // onInput={handleInput}
     onInputChange={handleInputChange}
     value={value}
     {...rest}

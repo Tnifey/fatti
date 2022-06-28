@@ -4402,7 +4402,7 @@ var shouldHideSelectedOptions = function shouldHideSelectedOptions2(props) {
   return hideSelectedOptions;
 };
 var instanceId = 1;
-var Select$2 = /* @__PURE__ */ function(_Component) {
+var Select$1 = /* @__PURE__ */ function(_Component) {
   _inherits(Select2, _Component);
   var _super = _createSuper(Select2);
   function Select2(_props) {
@@ -5619,14 +5619,14 @@ var Select$2 = /* @__PURE__ */ function(_Component) {
   }]);
   return Select2;
 }(_$1);
-Select$2.defaultProps = defaultProps;
+Select$1.defaultProps = defaultProps;
 var StateManagedSelect = /* @__PURE__ */ x$1(function(props, ref) {
   var baseSelectProps = useStateManager(props);
-  return /* @__PURE__ */ v$2(Select$2, _extends({
+  return /* @__PURE__ */ v$2(Select$1, _extends({
     ref
   }, baseSelectProps));
 });
-var Select$1 = StateManagedSelect;
+var ReactSelect = StateManagedSelect;
 function useMutationObserver(ref, options2 = { attributes: true, childList: true, subtree: true }, callback) {
   _(() => {
     const mutationObserver = new MutationObserver((mutations) => {
@@ -5639,9 +5639,13 @@ function useMutationObserver(ref, options2 = { attributes: true, childList: true
     };
   }, [ref, options2, callback]);
 }
-function App(props) {
+function Select(props) {
   var _a, _b, _c, _d, _e;
-  const { parent, select, ...rest } = props;
+  const {
+    parent,
+    select,
+    ...rest
+  } = props;
   const [disabled, setDisabled] = y$1((_a = select == null ? void 0 : select.current) == null ? void 0 : _a.disabled);
   const [rtl, setRtl] = y$1((_b = select == null ? void 0 : select.current) == null ? void 0 : _b.hasAttribute("data-rtl"));
   const [loading, setLoading] = y$1((_c = select == null ? void 0 : select.current) == null ? void 0 : _c.hasAttribute("data-loading"));
@@ -5736,13 +5740,10 @@ function App(props) {
   function handleChange(event) {
     setValue(event);
   }
-  function handleInput(event) {
-    emit("input", event);
-  }
   function handleInputChange(event) {
     emit("input-change", event);
   }
-  return /* @__PURE__ */ v$2(Select$1, {
+  return /* @__PURE__ */ v$2(ReactSelect, {
     options: options2,
     isDisabled: disabled,
     isLoading: loading,
@@ -5750,31 +5751,33 @@ function App(props) {
     isClearable: clearable,
     isRtl: rtl,
     onChange: handleChange,
-    onInput: handleInput,
     onInputChange: handleInputChange,
     value,
     ...rest
   });
 }
-function Select(select, props = {}) {
+function createSelect(select, options2 = {}) {
+  const {
+    wrapperElement,
+    wrapperClassName,
+    ...props
+  } = options2;
   const parent = select.parentElement;
-  const root = document.createElement(props.wrapperElement || "div");
-  parent == null ? void 0 : parent.appendChild(root);
-  for (let classname of classnames$1("fatti__wrapper", props.classes, [...select.classList.values()]).split(" ")) {
-    root.classList.add(classname);
+  const wrapper = document.createElement(wrapperElement || "div");
+  parent == null ? void 0 : parent.appendChild(wrapper);
+  const theWrapperClasses = classnames$1("fatti__wrapper", wrapperClassName, [...select.classList.values()]).split(" ");
+  for (let classname of theWrapperClasses) {
+    wrapper.classList.add(classname);
   }
   const parentRef = p$2();
   parentRef.current = parent;
   const selectRef = p$2();
   selectRef.current = select;
-  S$1(/* @__PURE__ */ v$2(App, {
+  S$1(/* @__PURE__ */ v$2(Select, {
     select: selectRef,
-    parent: parentRef
-  }), root);
-  return {
-    wrapper: root,
-    parent,
-    select
-  };
+    parent: parentRef,
+    ...props
+  }), wrapper);
+  return { wrapper, parent, select };
 }
-export { Select };
+export { createSelect };

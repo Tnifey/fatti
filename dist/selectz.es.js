@@ -5640,17 +5640,26 @@ function useMutationObserver(ref, options2 = { attributes: true, childList: true
   }, [ref, options2, callback]);
 }
 function Select(props) {
-  var _a, _b, _c, _d, _e;
+  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j;
   const {
     parent,
     select,
+    onChange: onChange2,
+    onInputChange,
+    onBlur,
+    onFocus: onFocus2,
+    onKeyDown,
+    onMenuClose,
+    onMenuOpen,
+    onMenuScrollToBottom,
+    onMenuScrollToTop,
     ...rest
   } = props;
-  const [disabled, setDisabled] = y$1((_a = select == null ? void 0 : select.current) == null ? void 0 : _a.disabled);
-  const [rtl, setRtl] = y$1((_b = select == null ? void 0 : select.current) == null ? void 0 : _b.hasAttribute("data-rtl"));
-  const [loading, setLoading] = y$1((_c = select == null ? void 0 : select.current) == null ? void 0 : _c.hasAttribute("data-loading"));
-  const [searchable, setSearchable] = y$1((_d = select == null ? void 0 : select.current) == null ? void 0 : _d.hasAttribute("data-searchable"));
-  const [clearable, setClearable] = y$1((_e = select == null ? void 0 : select.current) == null ? void 0 : _e.hasAttribute("data-clearable"));
+  const [disabled, setDisabled] = y$1((_b = rest.isDisabled) != null ? _b : (_a = select == null ? void 0 : select.current) == null ? void 0 : _a.disabled);
+  const [rtl, setRtl] = y$1((_d = rest.isRtl) != null ? _d : (_c = select == null ? void 0 : select.current) == null ? void 0 : _c.hasAttribute("data-rtl"));
+  const [loading, setLoading] = y$1((_f = rest.isLoading) != null ? _f : (_e = select == null ? void 0 : select.current) == null ? void 0 : _e.hasAttribute("data-loading"));
+  const [searchable, setSearchable] = y$1((_h = rest.isSearchable) != null ? _h : (_g = select == null ? void 0 : select.current) == null ? void 0 : _g.hasAttribute("data-searchable"));
+  const [clearable, setClearable] = y$1((_j = rest.isClearable) != null ? _j : (_i = select == null ? void 0 : select.current) == null ? void 0 : _i.hasAttribute("data-clearable"));
   const [value, setValue] = y$1(null);
   const [options2, setOptions] = y$1([]);
   const handleMutation = T$1((mutation) => {
@@ -5741,7 +5750,28 @@ function Select(props) {
     setValue(event);
   }
   function handleInputChange(event) {
-    emit("input-change", event);
+    emit("inputchange", event);
+  }
+  function handleBlur(event) {
+    emit("blur", event);
+  }
+  function handleFocus(event) {
+    emit("focus", event);
+  }
+  function handleKeyDown(event) {
+    emit("keydown", event);
+  }
+  function handleMenuClose() {
+    emit("menuclose");
+  }
+  function handleMenuOpen() {
+    emit("menuopen");
+  }
+  function handleMenuScrollToBottom(event) {
+    emit("menuscrolltobottom", event);
+  }
+  function handleMenuScrollToTop(event) {
+    emit("menuscrolltotop", event);
   }
   return /* @__PURE__ */ v$2(ReactSelect, {
     options: options2,
@@ -5752,6 +5782,13 @@ function Select(props) {
     isRtl: rtl,
     onChange: handleChange,
     onInputChange: handleInputChange,
+    onBlur: handleBlur,
+    onFocus: handleFocus,
+    onKeyDown: handleKeyDown,
+    onMenuClose: handleMenuClose,
+    onMenuOpen: handleMenuOpen,
+    onMenuScrollToBottom: handleMenuScrollToBottom,
+    onMenuScrollToTop: handleMenuScrollToTop,
     value,
     ...rest
   });

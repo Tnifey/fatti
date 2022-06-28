@@ -5,7 +5,7 @@ import Select, { SelectProps } from './select';
 export type SelectOptions = Partial<{
   wrapperElement?: 'div' | string,
   wrapperClassName?: string;
-}> & Omit<SelectProps, 'parent' | 'select'>;
+}> & Omit<SelectProps, 'parent' | 'select' | 'isMulti'>;
 
 export function createSelect(select: HTMLSelectElement, options: SelectOptions = {}) {
   const {

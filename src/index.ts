@@ -22,7 +22,7 @@ document.body.querySelector('.toggle-disable')?.addEventListener('click', () => 
 const options = [
     'loading',
     'clearable',
-    'searchable',
+    // 'searchable',
     'rtl',
 ];
 

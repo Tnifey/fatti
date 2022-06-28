@@ -11,14 +11,23 @@ export default function Select(props: SelectProps) {
   const {
     parent,
     select,
+    onChange,
+    onInputChange,
+    onBlur,
+    onFocus,
+    onKeyDown,
+    onMenuClose,
+    onMenuOpen,
+    onMenuScrollToBottom,
+    onMenuScrollToTop,
     ...rest
   } = props;
 
-  const [disabled, setDisabled] = useState<boolean>(select?.current?.disabled);
-  const [rtl, setRtl] = useState<boolean>(select?.current?.hasAttribute('data-rtl'));
-  const [loading, setLoading] = useState<boolean>(select?.current?.hasAttribute('data-loading'));
-  const [searchable, setSearchable] = useState<boolean>(select?.current?.hasAttribute('data-searchable'));
-  const [clearable, setClearable] = useState<boolean>(select?.current?.hasAttribute('data-clearable'));
+  const [disabled, setDisabled] = useState<boolean>(rest.isDisabled ?? select?.current?.disabled);
+  const [rtl, setRtl] = useState<boolean>(rest.isRtl ?? select?.current?.hasAttribute('data-rtl'));
+  const [loading, setLoading] = useState<boolean>(rest.isLoading ?? select?.current?.hasAttribute('data-loading'));
+  const [searchable, setSearchable] = useState<boolean>(rest.isSearchable ?? select?.current?.hasAttribute('data-searchable'));
+  const [clearable, setClearable] = useState<boolean>(rest.isClearable ?? select?.current?.hasAttribute('data-clearable'));
   const [value, setValue] = useState<any>(null);
   const [options, setOptions] = useState<any[]>([]);
 
@@ -95,8 +104,6 @@ export default function Select(props: SelectProps) {
     const opts = getSelectOptions();
     setOptions(opts);
 
-    const val = [];
-
     if (opts[0]) {
       setValue([{ ...opts[0] }]);
     }
@@ -128,12 +135,36 @@ export default function Select(props: SelectProps) {
     setValue(event);
   }
 
-  function handleInput(event: any) {
-    emit('input', event);
+  function handleInputChange(event: any) {
+    emit('inputchange', event);
   }
 
-  function handleInputChange(event: any) {
-    emit('input-change', event);
+  function handleBlur(event: any) {
+    emit('blur', event);
+  }
+
+  function handleFocus(event: any) {
+    emit('focus', event);
+  }
+
+  function handleKeyDown(event: any) {
+    emit('keydown', event);
+  }
+
+  function handleMenuClose() {
+    emit('menuclose');
+  }
+
+  function handleMenuOpen() {
+    emit('menuopen');
+  }
+
+  function handleMenuScrollToBottom(event: any) {
+    emit('menuscrolltobottom', event);
+  }
+
+  function handleMenuScrollToTop(event: any) {
+    emit('menuscrolltotop', event);
   }
 
   return (<ReactSelect
@@ -143,17 +174,15 @@ export default function Select(props: SelectProps) {
     isSearchable={searchable}
     isClearable={clearable}
     isRtl={rtl}
-    // onBlur
-    // onFocus
-    // onKeyDown
-    // onMenuClose
-    // onMenuOpen
-    // onMenuScrollToBottom
-    // onMenuScrollToTop
-    // getOptionLabel={getOptionLabel}
     onChange={handleChange}
-    // onInput={handleInput}
     onInputChange={handleInputChange}
+    onBlur={handleBlur}
+    onFocus={handleFocus}
+    onKeyDown={handleKeyDown}
+    onMenuClose={handleMenuClose}
+    onMenuOpen={handleMenuOpen}
+    onMenuScrollToBottom={handleMenuScrollToBottom}
+    onMenuScrollToTop={handleMenuScrollToTop}
     value={value}
     {...rest}
   />);

@@ -13,6 +13,7 @@ export default defineConfig({
   build: {
     target: "esnext",
     minify: "terser",
+    sourcemap: "inline",
     lib: {
       entry: resolve(__dirname, '/src/main.tsx'),
       name: "Selectz",

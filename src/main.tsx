@@ -15,7 +15,8 @@ export function createSelect(
   const { wrapperElement, wrapperClassName, ...props } = options;
 
   const parent = select.parentElement!;
-  const theWrapperClasses = classnames("fatti__wrapper", wrapperClassName, [
+  const className = classnames("fatti__wrapper", wrapperClassName, [
+    // @ts-ignore
     ...select.classList.values(),
   ]);
 
@@ -29,8 +30,8 @@ export function createSelect(
     <Select
       select={selectRef}
       parent={parentRef}
+      className={className}
       {...props}
-      className={theWrapperClasses}
     />,
     parent,
   );

@@ -44,7 +44,7 @@ export default function Select(props: SelectProps) {
   const [clearable, setClearable] = useState<boolean>(
     rest.isClearable ?? select?.current?.hasAttribute("data-clearable"),
   );
-  const [value, setValue] = useState<any>(null);
+  const [value, setValue] = useState<any>(select?.current?.value);
   const [options, setOptions] = useState<any[]>([]);
 
   const handleMutation = useCallback((mutation: MutationRecord) => {
@@ -101,6 +101,8 @@ export default function Select(props: SelectProps) {
         return {
           value: option.getAttribute("value"),
           label: option.innerText,
+          disabled: option.disabled,
+          selected: option.selected,
         };
       })
       .filter(Boolean);
@@ -120,16 +122,18 @@ export default function Select(props: SelectProps) {
   useEffect(() => {
     const current = select.current as HTMLSelectElement;
 
-    function handler(event) {
-      console.log("the change", event, event.target.value);
-    }
+    const handler = (event: any) => {
+      if (!event.isTrusted) return;
+      const val = event?.target?.value;
+      const item = options?.find?.(({ value }) => val == value) ?? null;
+      setValue(item);
+    };
 
     current.addEventListener("change", handler);
-
     return () => {
       current.removeEventListener("change", handler, false);
     };
-  }, [select.current]);
+  }, [select.current, options]);
 
   useEffect(() => {
     const current = select.current;
@@ -143,14 +147,20 @@ export default function Select(props: SelectProps) {
     const opts = getSelectOptions();
     setOptions(opts);
 
-    if (opts[0]) {
-      setValue([{ ...opts[0] }]);
+    const initValue = current.value;
+    current.value = initValue;
+
+    if (initValue) {
+      const init = opts?.find(({ value }) => value == initValue) ?? null;
+      setValue(init);
+      emit("change", init);
     }
 
-    emit("init", select);
+    emit("init", current);
+
     return () => {
       current.style.display = initd;
-      emit("destroy", select);
+      emit("destroy", current);
     };
   }, [select]);
 
@@ -173,6 +183,7 @@ export default function Select(props: SelectProps) {
   function handleChange(event: any) {
     setValue(event);
     select.current.value = event?.value;
+
     const theEvent = new Event("change");
     select.current.dispatchEvent(theEvent);
   }

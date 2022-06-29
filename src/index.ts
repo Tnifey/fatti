@@ -23,9 +23,14 @@ select.addEventListener("fatti:change", event => {
 });
 
 select.addEventListener("change", event => {
+  console.log("select change", event);
   // @ts-ignore
   const value = event.target.value;
   preview.innerText = value;
+});
+
+select.addEventListener("fatti:init", event => {
+  console.log("init", event);
 });
 
 document.body

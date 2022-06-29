@@ -90,10 +90,12 @@ export default function Select(props: SelectProps) {
 
   useMutationObserver(select, mutationObserverOptions, handleMutation);
 
-  function getSelectOptions() {
-    if (!select.current) return [];
+  function getSelectOptions(current: HTMLSelectElement) {
+    if (!current) return [];
+    const itemsOptions = current.querySelectorAll("option") as unknown as any[];
+    if (!itemsOptions?.length) return [];
 
-    const items = [...select.current.querySelectorAll("option")];
+    const items = [...itemsOptions];
     if (!items?.length) return [];
 
     return items
@@ -142,9 +144,9 @@ export default function Select(props: SelectProps) {
     emit("before-init", current);
 
     const initd = current.style.display;
-    current.style.display = "none";
+    // current.style.display = "none";
 
-    const opts = getSelectOptions();
+    const opts = getSelectOptions(current);
     setOptions(opts);
 
     const initValue = current.value;
@@ -164,21 +166,31 @@ export default function Select(props: SelectProps) {
     };
   }, [select]);
 
-  useEffect(() => {
-    if (!options?.length) {
-      const opts = select.current.querySelectorAll("option");
+  function getSelectedValues(optss?: any): string[] {
+    const opts = [...(optss || select.current.querySelectorAll("option"))];
+    return opts
+      .filter((option: HTMLOptionElement) => {
+        return option.getAttribute("selected") === "true";
+      })
+      .map((option: HTMLOptionElement) => option.value);
+  }
 
-      opts.forEach((option: HTMLOptionElement) => {
-        if (option.getAttribute("value") === (value?.value as string)) {
-          option.setAttribute("selected", true as any);
+  function setOptionsSelected(value) {
+    select.current
+      .querySelectorAll("option")
+      .forEach((option: HTMLOptionElement) => {
+        if (option.getAttribute("value") === value) {
+          option.setAttribute("selected", "true");
         } else {
           option.removeAttribute("selected");
         }
       });
+  }
 
-      emit("change", value);
-    }
-  }, [value]);
+  useEffect(() => {
+    setOptionsSelected(value?.value);
+    emit("change", value);
+  }, [select, value]);
 
   function handleChange(event: any) {
     setValue(event);

@@ -7,11 +7,7 @@ const select = root.querySelector("select.select")! as any as HTMLSelectElement;
 (() => {
   // @ts-ignore
   const fat = createSelect(select, {
-    replace: true,
     classNamePrefix: "fatti",
-    noOptionsMessage(obj) {
-      return `null blank nada`;
-    },
   });
 
   fat.select.addEventListener("fatti:change", console.log);

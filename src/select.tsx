@@ -190,8 +190,6 @@ export default function Select(props: SelectProps) {
   useEffect(() => {
     setOptionsSelected(value?.value);
     emit("change", value);
-    const theEvent = new Event("change");
-    select.current.dispatchEvent(theEvent);
   }, [select, value]);
 
   function handleChange(event: any) {
